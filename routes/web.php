@@ -29,6 +29,6 @@ Route::get('/google/callback', [GoogleLoginController::class, 'callback']);
 
 Route::get('/logout', [GoogleLoginController::class, 'logout'])->name('logout');
 
-Route::get('/list', [FolderController::class , 'index'])->middleware('auth');
+Route::get('/list/{email?}', [FolderController::class , 'index'])->middleware('auth');
 
 //require __DIR__.'/auth.php';

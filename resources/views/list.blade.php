@@ -9,6 +9,8 @@
 </head>
 <body>
 
+    <h2>Email : {{$email}}</h2>
+
     <ol>
         @foreach ($files as $result )
         <x-file :file="$result" />

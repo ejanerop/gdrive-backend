@@ -20,6 +20,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('files', function () {
-    return Storage::disk('google')->allDirectories();
-    //return Storage::disk('google')->allFiles();
 });
