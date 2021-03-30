@@ -1,10 +1,8 @@
 <?php
 
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\GoogleLoginController;
+use App\Http\Controllers\FolderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,28 +23,12 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-Route::get('/login', function () {
-    $parameters=['access_type' =>'offline'];
-    return Socialite::driver('google')->scopes(['https://www.googleapis.com/auth/drive'])->with($parameters)->redirect();
-});
+Route::get('/login', [GoogleLoginController::class, 'login'])->name('login');
 
-Route::get('/google/callback', function () {
-    $userData = Socialite::driver('google')->stateless()->user();
+Route::get('/google/callback', [GoogleLoginController::class, 'callback']);
 
-    $user = User::where('email' , $userData->email)->first();
-    if (!$user) {
-        $user = new User();
-    }
-    $user->name = $userData->name;
-    $user->email = $userData->email;
-    $user->refresh_token = $userData->token;
-    $user->save();
+Route::get('/logout', [GoogleLoginController::class, 'logout'])->name('logout');
 
-    Auth::login($user, true);
-
-    return redirect('/');
-});
-
-Route::get('/logout', [GoogleLoginController::class, 'logout']);
+Route::get('/list', [FolderController::class , 'index'])->middleware('auth');
 
 //require __DIR__.'/auth.php';
