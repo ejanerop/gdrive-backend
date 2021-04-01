@@ -4,29 +4,29 @@ namespace App\Http\Controllers;
 
 use Google_Client;
 use Google_Service_Drive;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 
-class FolderController extends Controller
+class FileController extends Controller
 {
-
     public function __construct(Google_Client $client)
     {
         $this->middleware(function($request , $next) use ($client) {
-            $client->refreshToken(Auth::user()->api_token);
+            $client->refreshToken($request->input('api_token'));
             $this->drive = new Google_Service_Drive($client);
             return $next($request);
         });
     }
 
-    public function index( $email = null ) {
+    public function index( Request $request ) {
 
         $files = [];
+
+        $email = $request->input('email') ? $request->input('email') : null;
 
         $files = $this->getFiles('root' , $email);
 
 
-        return view('list' , ['files' => $files , 'email' => $email]);
+        return ['files' => $files , 'email' => $email];
     }
 
     public function removePermission( Request $request ) {
@@ -90,5 +90,4 @@ class FolderController extends Controller
         return $result;
 
     }
-
 }

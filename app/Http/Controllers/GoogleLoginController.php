@@ -10,13 +10,19 @@ use App\Models\User;
 class GoogleLoginController extends Controller
 {
 
-    public function logout(Request $request) {
+    public function logout(Request $request , $api_token) {
 
+        $user = User::where('api_token' , $api_token)->first();
         session('g_token' , '' );
-        Auth::guard()->logout();
         $request->session()->invalidate();
 
-        return redirect('/');
+        if ($user) {
+            $user->api_token = null;
+            $user->save();
+            return response()->json('Sesión cerrada con éxito', 204);
+        }
+
+        return response()->json($api_token, 200);
 
     }
 
@@ -27,27 +33,27 @@ class GoogleLoginController extends Controller
                 'https://www.googleapis.com/auth/drive',
                 'https://www.googleapis.com/auth/drive.file',
                 'https://www.googleapis.com/auth/drive.metadata'
-            ])->with($parameters)->redirect();
-    }
+                ])->with($parameters)->redirect();
+            }
 
-    public function callback() {
+            public function callback() {
 
-        $userData = Socialite::driver('google')->stateless()->user();
+                $userData = Socialite::driver('google')->stateless()->user();
 
-        $user = User::where('email' , $userData->email)->first();
-        if (!$user) {
-            $user = new User();
+
+
+                $user = User::where('email' , $userData->email)->first();
+                if (!$user) {
+                    $user = new User();
+                }
+                $user->name = $userData->name;
+                $user->email = $userData->email;
+                $user->api_token = $userData->token;
+                $user->save();
+
+                Auth::guard('api')->setUser($user);
+
+                return redirect(env('FRONT_END_URL') . '/login' . '/' . $userData->token );
+
+            }
         }
-        $user->name = $userData->name;
-        $user->email = $userData->email;
-        $user->refresh_token = $userData->token;
-        $user->save();
-
-        Auth::login($user);
-
-        return $userData->token;
-
-        return redirect('/');
-
-    }
-}

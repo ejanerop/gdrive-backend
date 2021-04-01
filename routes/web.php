@@ -23,12 +23,10 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-Route::get('/login', [GoogleLoginController::class, 'login'])->name('login');
+Route::get('/login', [GoogleLoginController::class, 'login'])->middleware('cors')->name('login');
+Route::get('/google/callback', [GoogleLoginController::class, 'callback'])->middleware('cors');
+Route::get('/logout/{token}', [GoogleLoginController::class, 'logout'])->middleware('cors')->name('logout');
 
-Route::get('/google/callback', [GoogleLoginController::class, 'callback']);
-
-Route::get('/logout', [GoogleLoginController::class, 'logout'])->name('logout');
-
-Route::get('/list/{email?}', [FolderController::class , 'index'])->middleware('auth');
+//Route::get('/list/{email?}', [FolderController::class , 'index'])->middleware('auth');
 
 //require __DIR__.'/auth.php';
