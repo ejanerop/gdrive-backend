@@ -27,6 +27,3 @@ Route::get('/login', [GoogleLoginController::class, 'login'])->middleware('cors'
 Route::get('/google/callback', [GoogleLoginController::class, 'callback'])->middleware('cors');
 Route::get('/logout/{token}', [GoogleLoginController::class, 'logout'])->middleware('cors')->name('logout');
 
-//Route::get('/list/{email?}', [FolderController::class , 'index'])->middleware('auth');
-
-//require __DIR__.'/auth.php';

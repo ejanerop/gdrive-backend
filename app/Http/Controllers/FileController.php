@@ -31,12 +31,12 @@ class FileController extends Controller
 
     public function removePermission( Request $request ) {
 
-        if($request->input('files') && $request->input('user')) {
+        if($request->input('files') && $request->input('permission')) {
 
-            $user = $request->input('user');
+            $permission = $request->input('permission');
 
             foreach ($request->input('files') as $file) {
-                $this->drive->permissions->delete($file , $user);
+                $this->drive->permissions->delete($file , $permission);
             }
         }
 
@@ -73,14 +73,12 @@ class FileController extends Controller
 
         $result = [];
         $add = false;
-        $count = 0 ;
 
         foreach ($files as $file) {
             $add = false;
             foreach ($file->permissions as $permission) {
                 if($permission->getEmailAddress() == $email){
                     $add = true;
-                    $count++;
                 }
             }
             if ($add) {

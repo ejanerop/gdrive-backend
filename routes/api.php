@@ -23,3 +23,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/list', [FileController::class , 'index'])->name('list') ;
 
+Route::post('/unshare', [FileController::class , 'removePermission'])->name('unshare') ;
+
