@@ -1,6 +1,6 @@
 # Google Drive Permission Manager API
 
-App that uses the Google Drive API to bulk remove of users permissions on files.
+App that uses the Google Drive API to bulk remove users permissions on files/folders.
 
 Frontend: [https://github.com/ejanerop/gdrive-frontend](https://github.com/ejanerop/gdrive-frontend)
 
