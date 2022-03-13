@@ -2,6 +2,8 @@
 
 App that uses the Google Drive API to bulk remove of users permissions on files.
 
+Frontend: [https://github.com/ejanerop/gdrive-frontend](https://github.com/ejanerop/gdrive-frontend)
+
 ## Installation
 
 Clone repository:
