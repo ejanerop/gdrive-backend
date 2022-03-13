@@ -34,26 +34,24 @@ class GoogleLoginController extends Controller
                 'https://www.googleapis.com/auth/drive.file',
                 'https://www.googleapis.com/auth/drive.metadata'
                 ])->with($parameters)->redirect();
-            }
+    }
 
-            public function callback() {
+    public function callback() {
 
-                $userData = Socialite::driver('google')->stateless()->user();
+        $userData = Socialite::driver('google')->stateless()->user();
 
-
-
-                $user = User::where('email' , $userData->email)->first();
-                if (!$user) {
-                    $user = new User();
-                }
-                $user->name = $userData->name;
-                $user->email = $userData->email;
-                $user->api_token = $userData->token;
-                $user->save();
-
-                Auth::guard('api')->setUser($user);
-
-                return redirect(env('FRONT_END_URL') . '/login' . '/' . $userData->token );
-
-            }
+        $user = User::where('email' , $userData->email)->first();
+        if (!$user) {
+            $user = new User();
         }
+        $user->name = $userData->name;
+        $user->email = $userData->email;
+        $user->api_token = $userData->token;
+        $user->save();
+
+        Auth::guard('api')->setUser($user);
+
+        return redirect(env('FRONT_END_URL') . '/login' . '/' . $userData->token );
+
+    }
+}
